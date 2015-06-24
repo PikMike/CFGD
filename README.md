@@ -14,7 +14,7 @@ Official Android game (Gravity Defied Free)
 * Create folder **gd** on your phone's internal memory
 * Move generated folder **levels** to **gd**
 
-Java ME game
+Java ME game (not tested)
 ------------
 * Open game *.jar* file with any file archiver program
 * Delete **levels.mrg** in its root directory

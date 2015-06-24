@@ -96,32 +96,45 @@ def getOpts(args):  # Recognizing console app arguments and options
                     res[args[i][1]] = i
     return res
 
+def printHelp():
+    print()
+    print("Usage:", os.path.basename(__file__), '[options]')
+    print()
+    print("Options:")
+    print()
+    print("  -l, --list <handles>" + ' '*7 + "read handles from command line")
+    print(' '*29 + "(divided by space)")
+    print("  -f, --file <path>" + ' '*10 + "read handles from file")
+    print(' '*29 + "(one per line)")
+    print("  -h, --help" + ' '*17 + "display this message")
+
 def parse(args):
     opts = getOpts(args)  # Getting options positions
     handles = []
     if 'h' in opts:  # Help message
-        print()
-        print("Usage:", os.path.basename(__file__), '[options]')
-        print()
-        print("Options:")
-        print()
-        print("  -l, --list <handles>" + ' '*7 + "read handles from command line")
-        print(' '*29 + "(divided by space)")
-        print("  -f, --file <path>" + ' '*10 + "read handles from file")
-        print(' '*29 + "(one per line)")
-        print("  -h, --help" + ' '*17 + "display this message")
+        printHelp()
     else:
         if ('l' in opts) and ('f' in opts):  # Taking handles from arguments
-            handles += args[opts['l']+1:min(opts['f'], len(args))]
+            if (min(opts['f'], len(args))) - (opts['l']+1) < 1:
+                print("No arguments given for option -l")
+            else:
+                handles += args[opts['l'] + 1:min(opts['f'], len(args))]
         elif 'l' in opts:
-            handles += args[opts['l']+1:len(args)]
+            if (len(args)) - (opts['l'] + 1) < 1:
+                print("No arguments given for option -l")
+            else:
+                handles += args[opts['l']+1:len(args)]
         if 'f' in opts:  # And from input file
             if (opts['f'] < len(args)-1) and (os.path.isfile(args[opts['f'] + 1])):
                 file = open(args[opts['f']+1])
                 for i in file:
                     handles.append(i.split()[0])
+            elif (opts['f'] == len(args) - 1) or (('l' in opts) and (opts['l'] == opts['f'] + 1)):
+                print("No arguments given for option -f")
             else:
                 print("File not found")
+    if ('l' not in opts) and ('f' not in opts) and ('h' not in opts):
+        print("Options not found, run script with -h to view help")
     return handles
 
 def getJSON(i):
