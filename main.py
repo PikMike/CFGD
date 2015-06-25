@@ -155,6 +155,10 @@ def getJSON(i):
 args = sys.argv[1:]
 handles = parse(args)  # Creating handles list
 
+if len(handles) < 3:
+    print("You entered less than 3 handles, levels.mrg file will not be generated")
+    # Should be at least 1 track per level of difficulty in levels.mrg file
+
 if os.path.isdir("levels"):  # Creating directory for .gdlvl tracks
     for i in os.listdir('levels'):
         os.remove('levels/'+i)
@@ -201,4 +205,5 @@ while i < len(handles):
     i += 1
 hCnt = len(handles)
 lvls = [hCnt // 3, hCnt // 3, hCnt - (hCnt // 3)*2]  # Dividing levels into easy, medium and hard difficulties
-createMRG(coords, handles)
+if len(handles) > 2:
+    createMRG(coords, handles)
